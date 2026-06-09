@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}My Dashboard - Quiz System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>My Dashboard</h1>
+            <p class="text-muted">Welcome, {{ user.get_full_name|default:user.username }}!</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'chapter9_quiz_system:quiz_list' %}" class="btn btn-primary">
+                <i class="fas fa-list"></i> View All Quizzes
+            </a>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="card-title text-muted">Total Attempts</h6>
+                    <h2 class="card-text">{{ stats.total_attempts }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="card-title text-muted">Passed</h6>
+                    <h2 class="card-text text-success">{{ stats.total_passed }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="card-title text-muted">Failed</h6>
+                    <h2 class="card-text text-danger">{{ stats.total_attempts|add:stats.total_passed|stringformat:"-d" }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="card-title text-muted">Avg Score</h6>
+                    <h2 class="card-text">{{ stats.avg_score|floatformat:1 }}%</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Attempts -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Your Quiz Attempts</h5>
+                </div>
+                <div class="card-body">
+                    {% if user_attempts %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Quiz</th>
+                                    <th>Attempt #</th>
+                                    <th>Score</th>
+                                    <th>Percentage</th>
+                                    <th>Status</th>
+                                    <th>Started</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for attempt in user_attempts %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'chapter9_quiz_system:quiz_detail' attempt.quiz.id %}">
+                                            {{ attempt.quiz.title }}
+                                        </a>
+                                    </td>
+                                    <td>#{{ attempt.id }}</td>
+                                    <td>
+                                        {% if attempt.score %}
+                                            {{ attempt.score }} / {{ attempt.total_points }}
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if attempt.percentage %}
+                                            <span class="badge bg-{% if attempt.percentage >= attempt.quiz.passing_percentage %}success{% else %}danger{% endif %}">
+                                                {{ attempt.percentage }}%
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if attempt.is_completed %}
+                                            {% if attempt.is_passed %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check-circle"></i> Passed
+                                            </span>
+                                            {% else %}
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-times-circle"></i> Failed
+                                            </span>
+                                            {% endif %}
+                                        {% else %}
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-hourglass-half"></i> In Progress
+                                        </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small>{{ attempt.started_at|date:"M d, Y H:i" }}</small>
+                                    </td>
+                                    <td>
+                                        {% if attempt.is_completed %}
+                                        <a href="{% url 'chapter9_quiz_system:quiz_results' attempt.id %}" class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                        {% else %}
+                                        <a href="{% url 'chapter9_quiz_system:take_quiz' attempt.id %}" class="btn btn-sm btn-outline-warning">
+                                            Resume
+                                        </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <h5>No quiz attempts yet</h5>
+                        <p>Get started by taking a quiz!</p>
+                        <a href="{% url 'chapter9_quiz_system:quiz_list' %}" class="btn btn-primary">
+                            View Quizzes
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

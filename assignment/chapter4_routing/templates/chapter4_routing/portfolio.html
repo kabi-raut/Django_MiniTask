@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        nav {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            transition: all 0.3s;
+        }
+        nav a:hover {
+            color: #667eea;
+        }
+        .nav-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        main {
+            flex: 1;
+            padding: 40px 0;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 36px;
+        }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .project-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        .project-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        .project-card p {
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .tech {
+            background: #f0f0f0;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            color: #667eea;
+            font-weight: bold;
+            display: inline-block;
+        }
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-brand">Web App</div>
+            <div>
+                <a href="{% url 'chapter4_routing:home' %}">Home</a>
+                <a href="{% url 'chapter4_routing:about' %}">About</a>
+                <a href="{% url 'chapter4_routing:services' %}">Services</a>
+                <a href="{% url 'chapter4_routing:blog' %}">Blog</a>
+                <a href="{% url 'chapter4_routing:portfolio' %}">Portfolio</a>
+                <a href="{% url 'chapter4_routing:contact' %}">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <h1>Our Projects</h1>
+            
+            <div class="projects-grid">
+                {% for project in projects %}
+                    <div class="project-card">
+                        <h3>{{ project.name }}</h3>
+                        <p>{{ project.description }}</p>
+                        <div>
+                            <span class="tech">{{ project.technology }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Chapter 4 - Django Routing Demo</p>
+    </footer>
+</body>
+</html>

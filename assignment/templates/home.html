@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home - Django Assignment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 600px;
+        }
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        a {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .user-info {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+            color: #999;
+        }
+        .user-info strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Django Assignment</h1>
+        <p>A comprehensive Django project demonstrating various web development concepts including calculator, student records, blog system, task management, and a complete quiz system.</p>
+        
+        <div class="nav-links">
+            {% if user.is_staff %}
+            <a href="/admin/">Admin Panel</a>
+            {% endif %}
+            <a href="/chapter9/">Quiz System</a>
+            <a href="/accounts/logout/">Logout</a>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="user-info">
+            Logged in as: <strong>{{ user.username }}</strong>
+            {% if user.is_staff %}<br><span style="color: #4caf50;">✓ Staff Member</span>{% endif %}
+            {% if user.is_superuser %}<br><span style="color: #2196f3;">✓ Administrator</span>{% endif %}
+        </div>
+        {% else %}
+        <div class="user-info">
+            <a href="/accounts/login/" style="background: #4caf50;">Sign In</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chapter 3 - Student Marks Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        a {
+            display: inline-block;
+            padding: 15px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        a:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Chapter 3: Student Marks Analyzer</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">Using NumPy & Pandas for Data Analysis</p>
+        <div class="menu">
+            <a href="{% url 'chapter3_marks_analyzer:upload_data' %}">📤 Upload Data</a>
+            <a href="{% url 'chapter3_marks_analyzer:view_data' %}">👁️ View Data</a>
+            <a href="{% url 'chapter3_marks_analyzer:statistics' %}">📈 Statistics</a>
+            <a href="{% url 'chapter3_marks_analyzer:grouping' %}">📑 Grouping</a>
+            <a href="{% url 'chapter3_marks_analyzer:filtering' %}">🔍 Filtering</a>
+            <a href="{% url 'chapter3_marks_analyzer:sorting' %}">⬆️ Sorting</a>
+        </div>
+    </div>
+</body>
+</html>

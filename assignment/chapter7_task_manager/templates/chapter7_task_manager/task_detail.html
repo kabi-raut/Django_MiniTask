@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ task.title }}</title>
+    <style>
+        body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0}
+        .container{max-width:700px;margin:40px auto;background:#fff;padding:24px;border-radius:8px}
+        .meta{color:#666}
+        .actions a{margin-right:10px}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>{{ task.title }}</h1>
+    <p class="meta">Priority: {{ task.get_priority_display }} | Status: {{ task.get_status_display }}</p>
+    <p>{{ task.description }}</p>
+    <p>Due: {{ task.due_date|default:"-" }}</p>
+    <div class="actions">
+        <a href="{% url 'chapter7_task_manager:task_update' task.pk %}">Edit</a>
+        <a href="{% url 'chapter7_task_manager:task_delete' task.pk %}">Delete</a>
+        <a href="{% url 'chapter7_task_manager:task_list' %}">Back</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Statistics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .stat-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        .stat-label {
+            font-weight: bold;
+            color: #666;
+        }
+        .stat-value {
+            color: #333;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📈 Statistics</h1>
+        
+        {% if error %}
+            <div class="alert error">{{ error }}</div>
+            <p style="text-align: center;">Please <a href="{% url 'chapter3_marks_analyzer:upload_data' %}">upload data</a> first.</p>
+        {% elif stats %}
+            <div class="stats-grid">
+                {% for col, data in stats.items %}
+                    <div class="stat-card">
+                        <h3>{{ col }}</h3>
+                        <div class="stat-item">
+                            <span class="stat-label">Mean:</span>
+                            <span class="stat-value">{{ data.mean|floatformat:2 }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Median:</span>
+                            <span class="stat-value">{{ data.median|floatformat:2 }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Std Dev:</span>
+                            <span class="stat-value">{{ data.std|floatformat:2 }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Min:</span>
+                            <span class="stat-value">{{ data.min|floatformat:2 }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Max:</span>
+                            <span class="stat-value">{{ data.max|floatformat:2 }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Count:</span>
+                            <span class="stat-value">{{ data.count|floatformat:0 }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="text-align: center; color: #666;">No data available. Please <a href="{% url 'chapter3_marks_analyzer:upload_data' %}">upload data</a> first.</p>
+        {% endif %}
+
+        <div class="back-link">
+            <a href="{% url 'chapter3_marks_analyzer:index' %}">← Back to Menu</a>
+        </div>
+    </div>
+</body>
+</html>

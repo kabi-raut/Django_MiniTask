@@ -1,0 +1,6 @@
+<!DOCTYPE html><html><head><title>Create Post</title></head><body style="font-family:Arial;background:#f5f5f5;">
+<div style="max-width:700px;margin:40px auto;background:#fff;padding:24px;border-radius:8px;">
+<h2>Create Post</h2>
+<form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Save</button></form>
+<p><a href="{% url 'chapter8_user_dashboard:dashboard' %}">Back to dashboard</a></p>
+</div></body></html>

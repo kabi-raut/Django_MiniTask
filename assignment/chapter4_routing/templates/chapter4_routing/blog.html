@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        nav {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            transition: all 0.3s;
+        }
+        nav a:hover {
+            color: #667eea;
+        }
+        .nav-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        main {
+            flex: 1;
+            padding: 40px 0;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 36px;
+        }
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .post-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .post-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        .post-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        .post-meta {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .post-card p {
+            color: #666;
+            flex: 1;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .read-more {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .read-more:hover {
+            color: #764ba2;
+        }
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-brand">Web App</div>
+            <div>
+                <a href="{% url 'chapter4_routing:home' %}">Home</a>
+                <a href="{% url 'chapter4_routing:about' %}">About</a>
+                <a href="{% url 'chapter4_routing:services' %}">Services</a>
+                <a href="{% url 'chapter4_routing:blog' %}">Blog</a>
+                <a href="{% url 'chapter4_routing:portfolio' %}">Portfolio</a>
+                <a href="{% url 'chapter4_routing:contact' %}">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <h1>Latest Blog Posts</h1>
+            
+            <div class="posts-grid">
+                {% for post in posts %}
+                    <div class="post-card">
+                        <h3>{{ post.title }}</h3>
+                        <div class="post-meta">By {{ post.author }} on {{ post.date }}</div>
+                        <p>{{ post.excerpt }}</p>
+                        <a href="{% url 'chapter4_routing:blog_detail' post.id %}" class="read-more">Read More →</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Chapter 4 - Django Routing Demo</p>
+    </footer>
+</body>
+</html>

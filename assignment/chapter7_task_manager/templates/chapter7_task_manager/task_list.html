@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Manager</title>
+    <style>
+        body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0}
+        .container{max-width:1000px;margin:30px auto;background:#fff;padding:24px;border-radius:8px}
+        table{width:100%;border-collapse:collapse}
+        th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
+        .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+        .btn{background:#667eea;color:#fff;padding:10px 14px;border-radius:6px;text-decoration:none}
+        .filters form{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+        select,input{padding:8px}
+        .messages li{list-style:none;padding:8px;margin:6px 0;background:#e9f7ef}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="top">
+        <h1>Chapter 7: Task Manager</h1>
+        <a class="btn" href="{% url 'chapter7_task_manager:task_create' %}">+ New Task</a>
+    </div>
+
+    {% if messages %}
+      <ul class="messages">{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>
+    {% endif %}
+
+    <div class="filters">
+      <form method="get">
+        <input type="text" name="search" placeholder="Search title" value="{{ search_query }}">
+        <select name="status"><option value="">All Status</option>{% for v,l in status_choices %}<option value="{{ v }}" {% if status_filter == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+        <select name="priority"><option value="">All Priority</option>{% for v,l in priority_choices %}<option value="{{ v }}" {% if priority_filter == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+        <button type="submit">Filter</button>
+      </form>
+    </div>
+
+    <table>
+      <thead><tr><th>Title</th><th>Priority</th><th>Status</th><th>Due</th><th>Actions</th></tr></thead>
+      <tbody>
+      {% for task in tasks %}
+        <tr>
+          <td><a href="{% url 'chapter7_task_manager:task_detail' task.pk %}">{{ task.title }}</a></td>
+          <td>{{ task.get_priority_display }}</td>
+          <td>{{ task.get_status_display }}</td>
+          <td>{{ task.due_date|default:'-' }}</td>
+          <td>
+            <a href="{% url 'chapter7_task_manager:task_update' task.pk %}">Edit</a> |
+            <a href="{% url 'chapter7_task_manager:task_delete' task.pk %}">Delete</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5">No tasks found.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    <div style="margin-top:16px;">
+      {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Previous</a>{% endif %}
+      <span> Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} </span>
+      {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Next</a>{% endif %}
+    </div>
+</div>
+</body>
+</html>

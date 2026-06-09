@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chapter 6 - Blog Post System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .featured-section {
+            margin-bottom: 50px;
+        }
+        .featured-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .post-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .post-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+        }
+        .post-header h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .post-meta {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        .post-body {
+            padding: 20px;
+        }
+        .category-tag {
+            display: inline-block;
+            background: #f0f0f0;
+            color: #667eea;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .post-excerpt {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .read-more {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .read-more:hover {
+            color: #764ba2;
+        }
+        .categories-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
+        }
+        .categories-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .category-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .category-item {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .category-item:hover {
+            background: #667eea;
+        }
+        .category-item a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .category-item:hover a {
+            color: white;
+        }
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📖 Chapter 6 - Blog Post System</h1>
+        <p>Models, ORM & Admin Panel</p>
+    </header>
+
+    <div class="container">
+        <div class="categories-section">
+            <h2>Categories</h2>
+            <div class="category-items">
+                {% for category in categories %}
+                    <div class="category-item">
+                        <a href="{% url 'chapter6_blog_posts:category_posts' category.slug %}">{{ category.name }}</a>
+                    </div>
+                {% empty %}
+                    <p style="grid-column: 1 / -1; text-align: center; color: #999;">No categories yet</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="featured-section">
+            <h2>Featured Posts</h2>
+            <div class="featured-grid">
+                {% for post in featured_posts %}
+                    <div class="post-card">
+                        <div class="post-header">
+                            <h3>{{ post.title }}</h3>
+                            <div class="post-meta">By {{ post.author }} on {{ post.created_at|date:"M d, Y" }}</div>
+                        </div>
+                        <div class="post-body">
+                            {% if post.category %}
+                                <span class="category-tag">{{ post.category.name }}</span>
+                            {% endif %}
+                            <p class="post-excerpt">{{ post.excerpt }}</p>
+                            <a href="{% url 'chapter6_blog_posts:post_detail' post.slug %}" class="read-more">Read More →</a>
+                            <p style="color: #999; font-size: 12px; margin-top: 10px;">👁️ {{ post.views }} views</p>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p style="grid-column: 1 / -1; text-align: center; color: #999;">No posts yet</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 50px;">
+            <a href="{% url 'chapter6_blog_posts:post_list' %}" style="display: inline-block; padding: 12px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: all 0.3s;">View All Posts ({{ total_posts }})</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Chapter 6 - Blog Post System Demo</p>
+    </footer>
+</body>
+</html>

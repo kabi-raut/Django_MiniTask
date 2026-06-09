@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}{% if form.instance.pk %}Edit{% else %}Create{% endif %} Question{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>
+                {% if form.instance.pk %}
+                Edit Question
+                {% else %}
+                Create New Question
+                {% endif %}
+            </h1>
+            <p class="text-muted">
+                Quiz: 
+                {% if form.instance.quiz %}
+                    {{ form.instance.quiz.title }}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Question Details -->
+                        <fieldset class="mb-4">
+                            <legend class="h5 mb-3">Question Details</legend>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.question_text.id_for_label }}" class="form-label">
+                                    {{ form.question_text.label }} <span class="text-danger">*</span>
+                                </label>
+                                {{ form.question_text|add_class:"form-control" }}
+                                {% if form.question_text.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.question_text.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.question_type.id_for_label }}" class="form-label">
+                                            {{ form.question_type.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.question_type|add_class:"form-control" }}
+                                        {% if form.question_type.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.question_type.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="{{ form.points.id_for_label }}" class="form-label">
+                                            {{ form.points.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.points|add_class:"form-control" }}
+                                        {% if form.points.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.points.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="{{ form.order.id_for_label }}" class="form-label">
+                                            {{ form.order.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.order|add_class:"form-control" }}
+                                        {% if form.order.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.order.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!-- Choices (for option-based questions) -->
+                        <fieldset class="mb-4">
+                            <legend class="h5 mb-3">Answer Choices</legend>
+                            {{ formset.management_form }}
+                            {% for choice_form in formset %}
+                                <div class="card mb-3" id="form-{{ forloop.counter }}">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="mb-2">
+                                                    <label class="form-label">Choice Text</label>
+                                                    {{ choice_form.choice_text|add_class:"form-control" }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="mb-2">
+                                                    <label class="form-label">Order</label>
+                                                    {{ choice_form.order|add_class:"form-control" }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-check mt-4">
+                                                    {{ choice_form.is_correct }}
+                                                    <label class="form-check-label">
+                                                        Correct
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if choice_form.DELETE %}
+                                        <div class="form-check mt-2">
+                                            {{ choice_form.DELETE }}
+                                            <label class="form-check-label">
+                                                Delete this choice
+                                            </label>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <p class="text-muted small mb-0">
+                                For short answer questions, you can leave these empty.
+                            </p>
+                        </fieldset>
+
+                        <!-- Submit Button -->
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                {% if form.instance.pk %}
+                                Update Question
+                                {% else %}
+                                Create Question
+                                {% endif %}
+                            </button>
+                            <a href="{% url 'chapter9_quiz_system:quiz_list' %}" class="btn btn-outline-secondary btn-lg">
+                                Cancel
+                            </a>
+                        </div>
+
+                        <!-- Non-field errors -->
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">Instructions</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2">
+                            <strong>Question Type:</strong> Choose Multiple Choice, True/False, or Short Answer
+                        </li>
+                        <li class="mb-2">
+                            <strong>Points:</strong> Number of points awarded for correct answer
+                        </li>
+                        <li class="mb-2">
+                            <strong>Order:</strong> Question number in the quiz
+                        </li>
+                        <li class="mb-2">
+                            <strong>Choices:</strong> Add possible answers and mark the correct one
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

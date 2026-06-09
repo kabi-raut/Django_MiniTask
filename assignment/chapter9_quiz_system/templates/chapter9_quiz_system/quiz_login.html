@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz System - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .login-container {
+            background: white;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 450px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #999;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        .error-message {
+            color: #d32f2f;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #ffebee;
+            border: 1px solid #ef5350;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .error-message ul {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 30px;
+            font-size: 13px;
+            color: #1565c0;
+        }
+        .info-box strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .auth-links {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .auth-links a {
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="header">
+            <h1>Quiz System</h1>
+            <p class="subtitle">Sign in to your account</p>
+        </div>
+        
+        {% if form.non_field_errors %}
+            <div class="error-message">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="error-message" style="margin-top: 5px; margin-bottom: 0;">
+                        {{ form.username.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Password</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <div class="error-message" style="margin-top: 5px; margin-bottom: 0;">
+                        {{ form.password.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="submit-btn">Sign In</button>
+        </form>
+
+        <div class="auth-links">
+            New user? <a href="{% url 'accounts:signup' %}">Create an account</a>
+        </div>
+
+        <div class="info-box">
+            <strong>🔓 Demo Admin Account:</strong>
+            Username: <code>admin</code><br>
+            Password: <code>admin</code><br><br>
+            <strong>✓ Features:</strong><br>
+            • Admin can create & manage quizzes<br>
+            • Regular users can take quizzes<br>
+            • View results & attempt history
+        </div>
+    </div>
+</body>
+</html>

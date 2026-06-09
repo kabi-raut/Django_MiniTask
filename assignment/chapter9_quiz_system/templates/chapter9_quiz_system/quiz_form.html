@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Edit{% else %}Create{% endif %} Quiz{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>
+                {% if form.instance.pk %}
+                Edit Quiz: {{ form.instance.title }}
+                {% else %}
+                Create New Quiz
+                {% endif %}
+            </h1>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'chapter9_quiz_system:quiz_list' %}" class="btn btn-outline-secondary">
+                Back to Quizzes
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Basic Information -->
+                        <fieldset class="mb-4">
+                            <legend class="h5 mb-3">Basic Information</legend>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.title.id_for_label }}" class="form-label">
+                                    {{ form.title.label }}
+                                </label>
+                                {{ form.title }}
+                                {% if form.title.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.title.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.description.id_for_label }}" class="form-label">
+                                    {{ form.description.label }}
+                                </label>
+                                {{ form.description }}
+                                {% if form.description.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.description.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </fieldset>
+
+                        <!-- Settings -->
+                        <fieldset class="mb-4">
+                            <legend class="h5 mb-3">Settings</legend>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.passing_percentage.id_for_label }}" class="form-label">
+                                            {{ form.passing_percentage.label }}
+                                        </label>
+                                        {{ form.passing_percentage }}
+                                        {% if form.passing_percentage.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.passing_percentage.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.time_limit_minutes.id_for_label }}" class="form-label">
+                                            {{ form.time_limit_minutes.label }}
+                                        </label>
+                                        {{ form.time_limit_minutes }}
+                                        {% if form.time_limit_minutes.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.time_limit_minutes.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 form-check">
+                                {{ form.is_active }}
+                                <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                    {{ form.is_active.label }}
+                                </label>
+                                {% if form.is_active.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.is_active.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </fieldset>
+
+                        <!-- Submit Button -->
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                {% if form.instance.pk %}
+                                Update Quiz
+                                {% else %}
+                                Create Quiz
+                                {% endif %}
+                            </button>
+                            <a href="{% url 'chapter9_quiz_system:quiz_list' %}" class="btn btn-outline-secondary btn-lg">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">Tips</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <strong>Passing Percentage:</strong> Set the minimum percentage needed to pass
+                        </li>
+                        <li class="mb-2">
+                            <strong>Time Limit:</strong> Leave blank for no time limit
+                        </li>
+                        <li class="mb-2">
+                            <strong>Active:</strong> Uncheck to hide from users
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {% if form.instance.pk %}
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0">Questions</h6>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Total: {{ form.instance.questions.count }}</p>
+                    <a href="{% url 'chapter9_quiz_system:question_create' form.instance.pk %}" class="btn btn-sm btn-primary">
+                        Add Question
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

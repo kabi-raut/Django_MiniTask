@@ -1,0 +1,26 @@
+{% extends 'layouts/app.html' %}
+{% block content %}
+<h1> Dashboard: {{ request.user.username }}</h1>
+{% if perms.auth_app.delete_blog %}
+<input type='button'  value='Delete'/><br><br>
+{% else %}
+<h3> No delete Permission </h3>
+{% endif %}
+{% if perms.auth_app.add_blog %}
+<input type='button'  value='Add '/><br><br>
+{% else %}
+<h3> No add Permission </h3>
+{% endif %}
+{% if perms.auth_app.view_blog %}
+<input type='button'  value='View'/><br><br>
+{% else %}
+
+<h3> No view Permission </h3>
+{% endif %}rning'>Change Password</a>
+<a href="{% url 'set_password' %}" class='btn btn-info'
+
+<br>
+
+<a href="{% url 'logout' %}" class='btn btn-danger'>Logout</a>
+<a href="{% url 'change_password' %}" class='btn btn-wa>Set Password</a>
+{% endblock %}

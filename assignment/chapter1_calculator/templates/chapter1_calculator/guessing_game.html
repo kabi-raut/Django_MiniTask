@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Number Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .instructions {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            color: #666;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #764ba2;
+        }
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Number Guessing Game</h1>
+        
+        <div class="instructions">
+            <p>I'm thinking of a number between 1 and 100.<br>Can you guess it?</p>
+        </div>
+        
+        {% if game_won %}
+            <div class="message success">{{ message }}</div>
+            <a href="{% url 'chapter1_calculator:reset_game' %}" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #667eea; color: white; text-decoration: none; border-radius: 5px;">Play Again</a>
+        {% else %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="number" name="guess" min="1" max="100" placeholder="Enter your guess (1-100)" required autofocus>
+                <button type="submit">Guess</button>
+            </form>
+            
+            {% if message %}
+                <div class="message info">{{ message }}</div>
+            {% endif %}
+        {% endif %}
+        
+        <div class="back-link">
+            <a href="{% url 'chapter1_calculator:index' %}">← Back to Menu</a>
+        </div>
+    </div>
+</body>
+</html>

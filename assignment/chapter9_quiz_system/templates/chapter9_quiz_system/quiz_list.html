@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Available Quizzes - Quiz System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>Available Quizzes</h1>
+        </div>
+        <div class="col-md-4 text-end">
+            {% if user.is_staff %}
+            <a href="{% url 'chapter9_quiz_system:quiz_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create Quiz
+            </a>
+            {% endif %}
+            <a href="{% url 'chapter9_quiz_system:user_dashboard' %}" class="btn btn-info">
+                My Dashboard
+            </a>
+        </div>
+    </div>
+
+    {% if quizzes %}
+    <div class="row">
+        {% for quiz in quizzes %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ quiz.title }}</h5>
+                    <p class="card-text text-muted">{{ quiz.description|truncatewords:20 }}</p>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            <strong>{{ quiz.total_questions }}</strong> Questions |
+                            <strong>{{ quiz.attempts.count }}</strong> Attempts
+                        </small>
+                    </div>
+                    
+                    {% if quiz.total_attempts > 0 %}
+                    <div class="mb-3">
+                        <small>
+                            <span class="badge bg-info">Avg Score: {{ quiz.avg_score|floatformat:1 }}%</span>
+                            <span class="badge bg-warning">Pass: {{ quiz.passing_percentage }}%</span>
+                        </small>
+                    </div>
+                    {% endif %}
+
+                    <div class="btn-group w-100" role="group">
+                        <a href="{% url 'chapter9_quiz_system:quiz_detail' quiz.id %}" class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
+                        {% if user.is_staff and quiz.created_by == user %}
+                        <a href="{% url 'chapter9_quiz_system:quiz_edit' quiz.id %}" class="btn btn-sm btn-outline-secondary">
+                            Edit
+                        </a>
+                        <a href="{% url 'chapter9_quiz_system:quiz_delete' quiz.id %}" class="btn btn-sm btn-outline-danger">
+                            Delete
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mt-4">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <div class="alert alert-info">
+        <h4>No quizzes available yet</h4>
+        <p>Check back soon for new quizzes!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

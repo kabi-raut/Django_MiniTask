@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Take Quiz: {{ quiz.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .question-section {
+        background-color: #f8f9fa;
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+    .timer {
+        font-size: 24px;
+        font-weight: bold;
+        color: #dc3545;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>{{ quiz.title }}</h1>
+            <p class="text-muted">Attempt #{{ attempt.id }}</p>
+        </div>
+        <div class="col-md-4 text-end">
+            {% if time_remaining is not None %}
+            <div class="alert alert-warning mb-0">
+                <div class="timer">
+                    <i class="fas fa-clock"></i> 
+                    <span id="timer">{{ time_remaining }}</span>s
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <form method="post" class="needs-validation">
+        {% csrf_token %}
+
+        {% for question in questions %}
+        <div class="question-section">
+            <h5>Question {{ question.order }}: <span class="badge bg-secondary">{{ question.points }} pts</span></h5>
+            
+            <div class="mb-3">
+                <p class="lead">{{ question.question_text }}</p>
+            </div>
+
+            <div class="form-group">
+                {% if question.question_type == 'short_answer' %}
+                    <label for="question_text_{{ question.id }}" class="form-label">Your answer</label>
+                    <textarea
+                        class="form-control"
+                        name="question_text_{{ question.id }}"
+                        id="question_text_{{ question.id }}"
+                        rows="4"
+                        placeholder="Write your answer here..."></textarea>
+                {% elif question.question_type == 'true_false' %}
+                    <!-- True/False Question -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question_{{ question.id }}" 
+                               id="true_{{ question.id }}" value="True">
+                        <label class="form-check-label" for="true_{{ question.id }}">
+                            True
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question_{{ question.id }}" 
+                               id="false_{{ question.id }}" value="False">
+                        <label class="form-check-label" for="false_{{ question.id }}">
+                            False
+                        </label>
+                    </div>
+                {% else %}
+                    <!-- Multiple Choice Question -->
+                    {% for choice in question.choices.all %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question_{{ question.id }}" 
+                               id="choice_{{ choice.id }}" value="{{ choice.id }}">
+                        <label class="form-check-label" for="choice_{{ choice.id }}">
+                            {{ choice.choice_text }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if question.question_type != 'short_answer' %}
+                    <div class="mt-3">
+                        <label for="question_text_{{ question.id }}" class="form-label">Or type your answer</label>
+                        <textarea
+                            class="form-control"
+                            name="question_text_{{ question.id }}"
+                            id="question_text_{{ question.id }}"
+                            rows="2"
+                            placeholder="Type your answer here..."></textarea>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary btn-lg me-2">
+                <i class="fas fa-check"></i> Submit Quiz
+            </button>
+            <a href="{% url 'chapter9_quiz_system:quiz_list' %}" class="btn btn-outline-secondary btn-lg">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Timer countdown
+    {% if time_remaining is not None %}
+    let timeRemaining = {{ time_remaining }};
+    const timerElement = document.getElementById('timer');
+    
+    function updateTimer() {
+        timeRemaining--;
+        timerElement.textContent = timeRemaining;
+        
+        if (timeRemaining <= 0) {
+            document.querySelector('form').submit();
+        } else if (timeRemaining <= 60) {
+            timerElement.parentElement.style.color = '#dc3545';
+        }
+    }
+    
+    setInterval(updateTimer, 1000);
+    {% endif %}
+</script>
+{% endblock %}

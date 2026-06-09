@@ -1,0 +1,12 @@
+<!DOCTYPE html><html><head><title>Chapter 8 Dashboard</title></head><body style="font-family:Arial;background:#f5f5f5;">
+<div style="max-width:800px;margin:40px auto;background:#fff;padding:24px;border-radius:8px;">
+<h1>Chapter 8: Authentication & Authorization</h1>
+<p>User-specific blog dashboard mini project.</p>
+<a href="{% url 'chapter8_user_dashboard:login' %}">Login</a> |
+<a href="{% url 'chapter8_user_dashboard:register' %}">Register</a>
+{% if user.is_authenticated %}
+ | <a href="{% url 'chapter8_user_dashboard:dashboard' %}">Dashboard</a>
+ | <a href="{% url 'chapter8_user_dashboard:logout' %}">Logout</a>
+{% endif %}
+{% if messages %}<ul>{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>{% endif %}
+</div></body></html>

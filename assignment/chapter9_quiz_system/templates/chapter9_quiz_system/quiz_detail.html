@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ quiz.title }} - Quiz System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>{{ quiz.title }}</h1>
+            <p class="text-muted">Created by: {{ quiz.created_by.get_full_name|default:quiz.created_by.username }}</p>
+        </div>
+        <div class="col-md-4 text-end">
+            {% if user.is_staff and quiz.created_by == user %}
+            <a href="{% url 'chapter9_quiz_system:quiz_edit' quiz.id %}" class="btn btn-secondary">
+                Edit Quiz
+            </a>
+            {% endif %}
+            <a href="{% url 'chapter9_quiz_system:quiz_list' %}" class="btn btn-outline-secondary">
+                Back to Quizzes
+            </a>
+        </div>
+    </div>
+
+    <!-- Quiz Description -->
+    <div class="alert alert-light border">
+        <h5>Description</h5>
+        <p>{{ quiz.description|linebreaks }}</p>
+    </div>
+
+    <!-- Quiz Details -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Questions</h6>
+                    <p class="h4">{{ total_questions }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Total Points</h6>
+                    <p class="h4">{{ total_points }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Pass Score</h6>
+                    <p class="h4">{{ quiz.passing_percentage }}%</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Time Limit</h6>
+                    <p class="h4">
+                        {% if quiz.time_limit_minutes %}
+                            {{ quiz.time_limit_minutes }} min
+                        {% else %}
+                            Unlimited
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Start Quiz Button -->
+    <div class="alert alert-info mb-4">
+        <p>Ready to take this quiz? Click the button below to start!</p>
+        <a href="{% url 'chapter9_quiz_system:start_quiz' quiz.id %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-play"></i> Start Quiz
+        </a>
+    </div>
+
+    <!-- Previous Attempts -->
+    {% if user_attempts %}
+    <div class="card">
+        <div class="card-header">
+            <h5>Your Previous Attempts</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Attempt</th>
+                            <th>Score</th>
+                            <th>Percentage</th>
+                            <th>Status</th>
+                            <th>Started</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attempt in user_attempts %}
+                        <tr>
+                            <td>#{{ attempt.id }}</td>
+                            <td>{{ attempt.score }} / {{ attempt.total_points }}</td>
+                            <td>
+                                <span class="badge bg-{% if attempt.percentage >= quiz.passing_percentage %}success{% else %}danger{% endif %}">
+                                    {{ attempt.percentage }}%
+                                </span>
+                            </td>
+                            <td>
+                                {% if attempt.is_completed %}
+                                    {% if attempt.is_passed %}
+                                    <span class="badge bg-success">Passed</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">Failed</span>
+                                    {% endif %}
+                                {% else %}
+                                <span class="badge bg-warning">In Progress</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ attempt.started_at|date:"M d, Y H:i" }}</td>
+                            <td>
+                                {% if attempt.is_completed %}
+                                <a href="{% url 'chapter9_quiz_system:quiz_results' attempt.id %}" class="btn btn-sm btn-outline-primary">
+                                    View Results
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+<!DOCTYPE html><html><head><title>Dashboard</title></head><body style="font-family:Arial;background:#f5f5f5;">
+<div style="max-width:900px;margin:40px auto;background:#fff;padding:24px;border-radius:8px;">
+<h1>{{ user.username }}'s Dashboard</h1>
+<p><a href="{% url 'chapter8_user_dashboard:create_post' %}">+ Create Post</a> | <a href="{% url 'chapter8_user_dashboard:logout' %}">Logout</a></p>
+{% if messages %}<ul>{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>{% endif %}
+<h3>Your Posts</h3>
+<ul>
+{% for post in posts %}
+<li><strong>{{ post.title }}</strong> — {{ post.created_at|date:"M d, Y" }} <a href="{% url 'chapter8_user_dashboard:edit_post' post.id %}">Edit</a></li>
+{% empty %}<li>No posts yet.</li>{% endfor %}
+</ul>
+</div></body></html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 400px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input[type="number"], select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #764ba2;
+        }
+        .result {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculator</h1>
+        <form method="post">
+            {% csrf_token %}
+            <input type="number" name="num1" step="0.01" placeholder="First Number" required>
+            
+            <select name="operation" required>
+                <option value="">Select Operation</option>
+                <option value="add">Add (+)</option>
+                <option value="subtract">Subtract (-)</option>
+                <option value="multiply">Multiply (*)</option>
+                <option value="divide">Divide (/)</option>
+                <option value="power">Power (**)</option>
+                <option value="modulo">Modulo (%)</option>
+            </select>
+            
+            <input type="number" name="num2" step="0.01" placeholder="Second Number" required>
+            <button type="submit">Calculate</button>
+        </form>
+        
+        {% if result is not None %}
+            <div class="result">
+                <strong>Result: {{ result }}</strong>
+            </div>
+        {% endif %}
+        
+        <div class="back-link">
+            <a href="{% url 'chapter1_calculator:index' %}">← Back to Menu</a>
+        </div>
+    </div>
+</body>
+</html>

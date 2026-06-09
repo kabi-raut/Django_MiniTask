@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        nav {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            transition: all 0.3s;
+        }
+        nav a:hover {
+            color: #667eea;
+        }
+        .nav-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        main {
+            flex: 1;
+            padding: 40px 0;
+        }
+        .post {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        .post h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .post-meta {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+        }
+        .post-content {
+            color: #666;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        .back-link {
+            color: #667eea;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        .back-link:hover {
+            color: #764ba2;
+        }
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-brand">Web App</div>
+            <div>
+                <a href="{% url 'chapter4_routing:home' %}">Home</a>
+                <a href="{% url 'chapter4_routing:about' %}">About</a>
+                <a href="{% url 'chapter4_routing:services' %}">Services</a>
+                <a href="{% url 'chapter4_routing:blog' %}">Blog</a>
+                <a href="{% url 'chapter4_routing:portfolio' %}">Portfolio</a>
+                <a href="{% url 'chapter4_routing:contact' %}">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <article class="post">
+                <h1>{{ post.title }}</h1>
+                <div class="post-meta">
+                    By <strong>{{ post.author }}</strong> on <strong>{{ post.date }}</strong>
+                </div>
+                <div class="post-content">
+                    {{ post.content }}
+                </div>
+                <a href="{% url 'chapter4_routing:blog' %}" class="back-link">← Back to Blog</a>
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Chapter 4 - Django Routing Demo</p>
+    </footer>
+</body>
+</html>

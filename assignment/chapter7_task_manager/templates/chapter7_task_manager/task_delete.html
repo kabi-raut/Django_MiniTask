@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title>Delete Task</title></head>
+<body style="font-family:Arial;background:#f5f5f5;">
+<div style="max-width:600px;margin:40px auto;background:#fff;padding:24px;border-radius:8px;">
+    <h2>Delete Task</h2>
+    <p>Are you sure you want to delete <strong>{{ task.title }}</strong>?</p>
+    <form method="post">{% csrf_token %}
+        <button type="submit" style="padding:10px 16px;background:#dc3545;color:#fff;border:none;border-radius:6px;">Delete</button>
+        <a href="{% url 'chapter7_task_manager:task_list' %}">Cancel</a>
+    </form>
+</div>
+</body>
+</html>
